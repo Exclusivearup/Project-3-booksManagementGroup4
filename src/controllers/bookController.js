@@ -94,9 +94,11 @@ const createBook = async function (req, res) {
 			})
 
 		const addBook = await bookModel.create(req.body)
+
+		const findBook = await bookModel.findOne({_id:addBook._id},{deletedAt:0})
 		return res
 			.status(201)
-			.send({ status: true, message: 'Success', data: addBook })
+			.send({ status: true, message: 'Success', data: findBook })
 	} catch (error) {
 		res.status(500).send({ status: false, message: error.message })
 	}
@@ -142,6 +144,7 @@ const getBooks = async function (req, res) {
 		if (findBooks.length == 0) {
 			return res.status(404).send({ status: false, message: 'No Book found' })
 		}
+
 		return res
 			.status(200)
 			.send({ status: true, message: 'success', data: findBooks })
@@ -228,14 +231,16 @@ const updateBook = async function (req, res) {
 				.send({ status: false, message: 'No book available for this id' })
 		}
 
-		let updateData = await bookModel.findByIdAndUpdate(
+		 await bookModel.findByIdAndUpdate(
 			{ _id: getBookId },
 			getBody,
-			{ new: true }
+
 		)
+
+		let findUpdatedBook = await bookModel.findOne({ _id: getBookId },{deletedAt:0,__v:0})
 		return res
 			.status(200)
-			.send({ status: true, message: 'Success', data: updateData })
+			.send({ status: true, message: 'Success', data: findUpdatedBook })
 	} catch (error) {
 		res.status(500).send({ status: false, message: error.message })
 	}
