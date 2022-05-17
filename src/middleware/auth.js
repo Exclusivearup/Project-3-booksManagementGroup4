@@ -26,11 +26,7 @@ const authentication = async function (req, res, next) {
      
 
     const decodedToken = jwt.verify(token, "Project3")
-    if (!decodedToken) {
-      return res
-        .status(401)
-        .send({ status: false, msg: "Invalid authentication token" });
-    }
+   
     next();
 
 

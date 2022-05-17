@@ -28,7 +28,7 @@ const addReview = async function (req, res) {
 		//validation
 		if (!isValidObjectId(bookId)) {
 			return res
-				.status(403)
+				.status(400)
 				.send({ status: false, message: 'Invalid bookId' })
 		}
 
@@ -97,7 +97,7 @@ const updateReview = async function (req, res) {
 		
 		const findBookDoc = await bookModel
 			.findOne({ _id: getBookId, isDeleted: false })
-			.lean()
+			
 
 		if (!findBookDoc) {
 			return res
@@ -106,7 +106,7 @@ const updateReview = async function (req, res) {
 		}
 
 		const findReviewDoc = await reviewModel.findOne({ _id: getReviewId, isDeleted: false })
-		if (!findReviewDoc) {return res.status(404).send({ status: false, message: 'Review does not exsits'})}
+		if (!findReviewDoc) {return res.status(404).send({ status: false, message: 'Review does not exits'})}
 
 
 		if (Object.keys(getBodyData).length == 0) {
@@ -149,6 +149,7 @@ const updateReview = async function (req, res) {
 
 const deleteReview = async function (req, res) {
 	try {
+
 		let bookId = req.params.bookId
 		let reviewId = req.params.reviewId
 
@@ -156,6 +157,16 @@ const deleteReview = async function (req, res) {
 		if(!isValidObjectId(reviewId)){return res.status(400).send({ status: false, message: 'please enter Valid reviewId' })}
 		
 
+		const findBookDoc = await bookModel
+			.findOne({ _id: getBookId, isDeleted: false })
+			
+
+		if (!findBookDoc) {
+			return res
+				.status(404)
+				.send({ status: false, message: 'Book does not exists ' })
+		}
+		
 		let isReviewExists = await reviewModel.findOne({
 			_id: reviewId,		
 			bookId: bookId, //to check if review belongs to book
