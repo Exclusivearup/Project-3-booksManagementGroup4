@@ -152,7 +152,8 @@ const deleteReview = async function (req, res) {
 
 		let bookId = req.params.bookId
 		let reviewId = req.params.reviewId
-
+		const getBookId = req.params.bookId
+		
 		if(!isValidObjectId(bookId)){return res.status(400).send({ status: false, message: 'please enter Valid bookId' })}
 		if(!isValidObjectId(reviewId)){return res.status(400).send({ status: false, message: 'please enter Valid reviewId' })}
 		

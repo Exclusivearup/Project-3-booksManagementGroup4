@@ -47,7 +47,7 @@ const registerUser = async function (req, res) {
         .send({ status: false, message: "Please Enter mobile" });
     }
 
-    const checkPhone = await userModel.findOne({ phone: phone });
+    const checkPhone = await userModel.findOne({ phone: getBodyData.phone });
     if (checkPhone) {
       return res.status(409).send({
         status: false,
@@ -67,7 +67,7 @@ const registerUser = async function (req, res) {
         .send({ status: false, message: "Please Enter email" });
     }
 
-    const checkEmail = await userModel.findOne({ email: email });
+    const checkEmail = await userModel.findOne({ email: getBodyData.email });
 
     if (checkEmail) {
       return res

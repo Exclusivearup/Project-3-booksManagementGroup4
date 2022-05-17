@@ -1,4 +1,4 @@
-//@ts-check
+
 const bookModel = require("../models/bookModel");
 const reviewModel = require("../models/reviewModel");
 const mongoose = require("mongoose");
@@ -22,8 +22,7 @@ const createBook = async function (req, res) {
         .send({ status: false, message: "Please Enter Data" });
     }
 
-    const { title, excerpt, userId, ISBN, category, subcategory, releasedAt } =
-      getBodyData;
+    const { title, excerpt, userId, ISBN, category, subcategory, releasedAt } = getBodyData;
 
     if (!isValid(title)) {
       return res
@@ -31,7 +30,7 @@ const createBook = async function (req, res) {
         .send({ status: false, message: "Please Enter Title" });
     }
 
-    const checkTitle = await bookModel.findOne({ title: title });
+    const checkTitle = await bookModel.findOne({ title: getBodyData.title });
     if (checkTitle)
       return res
         .status(400)
@@ -65,7 +64,7 @@ const createBook = async function (req, res) {
     }
 
     //ISBN duplicate or not
-    const checkISBN = await bookModel.findOne({ ISBN: ISBN });
+    const checkISBN = await bookModel.findOne({ ISBN: getBodyData.ISBN });
     if (checkISBN)
       return res
         .status(400)
